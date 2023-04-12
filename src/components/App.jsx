@@ -5,6 +5,9 @@ import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 
 export class App extends Component {
+  // initialContacts = localStorage.getItem('contacts')
+  //   ? JSON.parse(localStorage.getItem('contacts'))
+  //   : [];
   state = {
     contacts: [],
     filter: '',
@@ -42,9 +45,19 @@ export class App extends Component {
   // =================================
   componentDidMount() {
     console.log('ComponentDidMount');
+    const contacts = localStorage.getItem('contacts');
+    if (contacts) {
+      this.setState({ contacts: JSON.parse(contacts) });
+    }
+    // this.setState(
+    //   contacts ? { contacts: JSON.parse(contacts) } : { contacts: [] }
+    // );
   }
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     console.log('ComponentDidUpdate');
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
   }
   //===========================================
   render() {
